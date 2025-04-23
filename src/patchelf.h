@@ -150,10 +150,15 @@ public:
 
     void setInterpreter(const std::string & newInterpreter);
 
-    typedef enum { rpPrint, rpShrink, rpSet, rpAdd, rpRemove } RPathOp;
+    typedef enum { rpPrint, rpShrink, rpSet, rpAdd, rpRemove, rpMakeRelative} RPathOp;
 
-    void modifyRPath(RPathOp op, const std::vector<std::string> & allowedRpathPrefixes, std::string newRPath);
+    bool libFoundInRPath(const std::string & dirName,
+        const std::vector<std::string> neededLibs,
+        std::vector<bool> & neededLibFound);
+
+    void modifyRPath(RPathOp op, const std::vector<std::string> & allowedRpathPrefixes, std::string newRPath, const std::string & rootDir, const std::string & fileName);
     std::string shrinkRPath(char* rpath, std::vector<std::string> &neededLibs, const std::vector<std::string> & allowedRpathPrefixes);
+    std::string makeRelativeRPath(char* rpath, std::vector<std::string> &neededLibs, const std::string & rootDir, const std::string & fileName);
     void removeRPath(Elf_Shdr & shdrDynamic);
 
     void addNeeded(const std::set<std::string> & libs);
